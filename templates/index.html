@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Automation | Control Center</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">⌘</div>
+            <div>
+                <h1>WAREHOUSE <span>AUTOMATION</span></h1>
+                <p>RTL-POWERED SMART LOGISTICS</p>
+            </div>
+        </div>
+
+        <div class="connection">
+            <span class="live-dot"></span>
+            <span>CONNECTED</span>
+            <span class="connection-divider"></span>
+            <span>VIVADO XSIM 2018.3</span>
+        </div>
+    </header>
+
+    <main class="dashboard">
+
+        <!-- LEFT COLUMN -->
+        <aside class="left-column">
+
+            <section class="panel order-panel">
+                <div class="panel-heading">
+                    <span class="heading-icon">⌂</span>
+                    <div>
+                        <h2>Order Configuration</h2>
+                        <p>Configure a warehouse order</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pickup">PICKUP CELL</label>
+                    <select id="pickup"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="destination">DESTINATION CELL</label>
+                    <select id="destination"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">ORDER PRIORITY</label>
+                    <select id="priority">
+                        <option value="3">Critical</option>
+                        <option value="2">High</option>
+                        <option value="1" selected>Normal</option>
+                        <option value="0">Low</option>
+                    </select>
+                </div>
+
+                <button id="runButton" class="run-button" onclick="runSimulation()">
+                    <span class="play-icon">▶</span>
+                    RUN SIMULATION
+                </button>
+
+                <p id="message" class="message">
+                    Configure an order to begin.
+                </p>
+            </section>
+
+            <section class="panel status-panel">
+                <div class="panel-heading compact">
+                    <span class="heading-icon">◉</span>
+                    <h2>Simulation Status</h2>
+                </div>
+
+                <div class="status-list">
+                    <div><span class="status-indicator"></span> Compiling RTL</div>
+                    <div><span class="status-indicator"></span> Allocating Vehicle</div>
+                    <div><span class="status-indicator"></span> Calculating Pickup Route</div>
+                    <div><span class="status-indicator"></span> Collecting Order</div>
+                    <div><span class="status-indicator"></span> Calculating Delivery Route</div>
+                    <div><span class="status-indicator"></span> Delivering Order</div>
+                    <div><span class="status-indicator"></span> Completed</div>
+                </div>
+                <p class="status-note">Status stages are illustrative until connected to simulation events.</p>
+            </section>
+
+        </aside>
+
+        <!-- CENTER COLUMN -->
+        <section class="panel warehouse-panel">
+
+            <div class="panel-heading warehouse-heading">
+                <div>
+                    <span class="heading-icon">▦</span>
+                    <div>
+                        <h2>Warehouse Grid</h2>
+                        <p>5 × 5 virtual warehouse environment</p>
+                    </div>
+                </div>
+                <span class="grid-tag">25 CELLS</span>
+            </div>
+
+            <div class="grid-wrapper">
+                <div id="grid" class="grid"></div>
+            </div>
+
+            <div class="legend">
+                <div><span class="legend-dot vehicle0"></span>Vehicle 0</div>
+                <div><span class="legend-dot vehicle1"></span>Vehicle 1</div>
+                <div><span class="legend-dot vehicle2"></span>Vehicle 2</div>
+                <div><span class="legend-dot pickup-dot"></span>Pickup</div>
+                <div><span class="legend-dot destination-dot"></span>Destination</div>
+            </div>
+
+            <div class="warehouse-footer">
+                <span>GRID: 5 × 5</span>
+                <span>VEHICLES: 03</span>
+                <span>MOVEMENT: 4-DIRECTIONAL</span>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="right-column">
+
+            <section class="panel analytics-panel">
+                <div class="panel-heading">
+                    <span class="heading-icon">▥</span>
+                    <div>
+                        <h2>Simulation Analytics</h2>
+                        <p>Execution summary</p>
+                    </div>
+                </div>
+
+                <div class="analytics-list">
+                    <div class="analytics-row">
+                        <span>Allocated Vehicle</span>
+                        <strong id="allocatedVehicle">--</strong>
+                    </div>
+
+                    <div class="analytics-row">
+                        <span>Routes Generated</span>
+                        <strong id="routeCount">0</strong>
+                    </div>
+
+                    <div class="analytics-row">
+                        <span>Final Position</span>
+                        <strong id="finalPosition">--</strong>
+                    </div>
+
+                    <div class="analytics-row">
+                        <span>Collisions</span>
+                        <strong id="collisionCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="vehicle-live">
+                    <h3>VEHICLE POSITIONS</h3>
+                    <div id="vehiclePositions">
+                        <p>Waiting for simulation...</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel routes-panel">
+                <div class="panel-heading compact">
+                    <span class="heading-icon">⌁</span>
+                    <h2>Route Information</h2>
+                </div>
+
+                <div id="routeInfo">
+                    <p>No routes generated yet.</p>
+                </div>
+            </section>
+
+            <section class="panel log-panel">
+                <div class="panel-heading compact">
+                    <span class="heading-icon">▤</span>
+                    <h2>Simulation Log</h2>
+                </div>
+
+                <div id="simulationLog" class="log">
+                    System ready.
+                </div>
+            </section>
+
+        </aside>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-brand">
+            <span class="footer-symbol">▥</span>
+            <span>SMART WAREHOUSE. INTELLIGENT LOGISTICS.</span>
+        </div>
+
+        <div class="footer-tech">
+            <span>VERILOG RTL</span>
+            <span>VIVADO XSIM</span>
+            <span>PYTHON FLASK</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+
+</html>

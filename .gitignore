@@ -1,0 +1,17 @@
+
+venv/
+__pycache__/
+*.pyc
+.env
+*.log
+*.jou
+*.str
+*.wdb
+*.vcd
+*.vvp
+*.o
+*.d
+.Xil/
+xsim.dir/
+.sim/
+.vscode/
