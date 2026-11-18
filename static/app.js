@@ -338,6 +338,10 @@ renderGrid();
 fetch("/api/health")
     .then(response => response.json())
     .then(data => {
+        const simulatorNameElem = document.getElementById("simulatorName");
+        if (simulatorNameElem && data.simulator) {
+            simulatorNameElem.textContent = data.simulator.toUpperCase();
+        }
         logMessage(
             `Backend connected: ${data.simulator}`
         );

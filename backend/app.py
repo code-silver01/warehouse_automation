@@ -1,10 +1,14 @@
 
+import sys
 from pathlib import Path
 from flask import Flask, render_template, request, jsonify
-from backend.sim_runner import simulate_order
 import traceback
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from backend.sim_runner import simulate_order, is_vivado_available
 
 app = Flask(
     __name__,
@@ -91,9 +95,11 @@ def run_simulation():
 
 @app.route("/api/health")
 def health():
+    vivado_found = is_vivado_available()
     return jsonify({
         "status": "online",
-        "simulator": "Vivado XSim 2018.3",
+        "simulator": "Vivado XSim 2018.3" if vivado_found else "Cloud Emulated Digital Twin (Python Engine)",
+        "mode": "hardware_xsim" if vivado_found else "cloud_digital_twin",
         "grid": "5x5",
         "vehicles": 3
     })

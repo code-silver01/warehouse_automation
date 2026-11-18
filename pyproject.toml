@@ -1,0 +1,10 @@
+[project]
+name = "warehouse-automation"
+version = "0.1.0"
+description = "Warehouse Automation System with FPGA Digital Twin and Web Dashboard"
+dependencies = [
+    "Flask>=3.1.2"
+]
+
+[tool.vercel]
+entrypoint = "backend.app:app"
